@@ -1,0 +1,168 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+def versions = rootProject.ext.versions
+
+android {
+    compileSdkVersion versions.compileSdk
+
+    defaultConfig {
+        applicationId "org.sportsstories"
+        minSdkVersion 21
+        targetSdkVersion versions.compileSdk
+        versionCode 2
+        versionName "1.0.1"
+        // TODO change it
+        buildConfigField "String", "MIDDLE_URL", '"http://95.213.39.140:8080"'
+
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    signingConfigs {
+        debug {
+            storeFile file('keystore/debug.jks')
+            keyAlias 'debug'
+            keyPassword 'androiddebug'
+            storePassword 'androiddebug'
+        }
+        release {
+            //TODO set release keystore
+        }
+    }
+
+    flavorDimensions "proguardSettings"
+
+    productFlavors {
+        noObfuscate {
+            dimension "proguardSettings"
+            proguardFiles rootProject.file('proguard/noObfuscate.pro'), getDefaultProguardFile('proguard-android-optimize.txt')
+
+            buildConfigField "Boolean", "ENABLE_PROGUARD", "false"
+        }
+        obfuscate {
+            dimension "proguardSettings"
+            proguardFiles rootProject.file('proguarg/obfuscate.pro'), getDefaultProguardFile('proguard-android-optimize.txt')
+
+            buildConfigField "Boolean", "ENABLE_PROGUARD", "true"
+        }
+    }
+
+    buildTypes {
+        debug {
+            minifyEnabled false
+            shrinkResources false
+        }
+        release {
+            minifyEnabled true
+            shrinkResources true
+        }
+    }
+
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
+
+    // For app bundle
+    splits {
+        density.enable true
+        abi.enable true
+        language.enable true
+    }
+
+    bundle {
+        language {
+            // Specifies that the app bundle should not support
+            // configuration APKs for language resources. These
+            // resources are instead packaged with each base and
+            // dynamic feature APK.
+            enableSplit = true
+        }
+        density {
+            // This property is set to true by default.
+            enableSplit = true
+        }
+        abi {
+            // This property is set to true by default.
+            enableSplit = true
+        }
+    }
+
+}
+
+androidExtensions {
+    experimental = true
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+
+    // Dagger
+    implementation "com.google.dagger:dagger:$versions.dagger"
+    kapt "com.google.dagger:dagger-compiler:$versions.dagger"
+
+    // AndroidX
+    implementation "androidx.appcompat:appcompat:$versions.appcompat"
+    implementation "androidx.recyclerview:recyclerview:$versions.androidx"
+    implementation "androidx.cardview:cardview:$versions.androidx"
+    implementation "androidx.gridlayout:gridlayout:$versions.androidx"
+    implementation "androidx.core:core-ktx:$versions.androidxKtx"
+    implementation "androidx.constraintlayout:constraintlayout:$versions.constraintlayout"
+
+    // JodaTime
+    implementation "net.danlew:android.joda:$versions.joda"
+
+    // Material
+    implementation "com.google.android.material:material:$versions.material"
+
+    // Lifecycle
+    implementation "androidx.lifecycle:lifecycle-extensions:$versions.lifecycle"
+    implementation "androidx.lifecycle:lifecycle-reactivestreams:$versions.lifecycle"
+
+    // Room
+    implementation "androidx.room:room-runtime:$versions.room"
+    implementation "androidx.room:room-ktx:$versions.room"
+    kapt "androidx.room:room-compiler:$versions.room"
+
+    // Retrofit
+    implementation "com.squareup.retrofit2:retrofit:$versions.retrofit"
+    implementation "com.squareup.retrofit2:converter-moshi:$versions.moshiconverter"
+    implementation "com.squareup.okhttp3:logging-interceptor:$versions.okhttp3interceptor"
+    implementation 'com.squareup.okhttp3:okhttp-urlconnection:4.0.1'
+
+    // Cicerone
+    implementation "ru.terrakok.cicerone:cicerone:$versions.cicerone"
+
+    // Moshi
+    implementation "com.squareup.moshi:moshi:$versions.moshi"
+    kapt "com.squareup.moshi:moshi-kotlin-codegen:$versions.moshi"
+
+    // Coroutines
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$versions.coroutines"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$versions.coroutines"
+
+    // Internal modules
+    implementation project(':lifecycle-coroutines')
+    gradle.ext.roboswag.forEach { module ->
+        implementation project(":$module")
+    }
+
+    // VK SKD
+    implementation "com.vk:androidsdk:$versions.vkSDK"
+
+    // Glide
+    implementation "com.github.bumptech.glide:glide:$versions.glide"
+
+    // Test
+    testImplementation "junit:junit:$versions.junit"
+    testImplementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+    testImplementation "org.mockito:mockito-core:$versions.mockito"
+    testImplementation "org.mockito:mockito-inline:$versions.mockito"
+    androidTestImplementation "org.mockito:mockito-android:$versions.mockito"
+    kaptTest "com.google.dagger:dagger-compiler:$versions.dagger"
+}

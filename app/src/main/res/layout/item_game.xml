@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="56dp"
+    app:cardElevation="4dp"
+    app:cardCornerRadius="6dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp">
+
+        <ImageView
+            android:id="@+id/item_game_first_team_logo"
+            android:layout_width="40dp"
+            android:layout_height="37dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="contentDescription" />
+
+        <TextView
+            android:id="@+id/item_game_first_team_country"
+            style="@style/TextAppearance9R"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxWidth="40dp"
+            android:maxLines="1"
+            app:layout_constraintStart_toStartOf="@id/item_game_first_team_logo"
+            app:layout_constraintTop_toBottomOf="@id/item_game_first_team_logo"
+            tools:text="Россия" />
+
+        <ImageView
+            android:id="@+id/item_game_second_team_logo"
+            android:layout_width="40dp"
+            android:layout_height="37dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="contentDescription" />
+
+        <TextView
+            android:id="@+id/item_game_second_team_country"
+            style="@style/TextAppearance9R"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxWidth="40dp"
+            android:maxLines="1"
+            app:layout_constraintEnd_toEndOf="@id/item_game_second_team_logo"
+            app:layout_constraintTop_toBottomOf="@id/item_game_second_team_logo"
+            tools:text="Аргентина" />
+
+        <ru.touchin.widget.Switcher
+            android:id="@+id/item_game_view_switcher"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/item_game_start_time"
+                style="@style/TextAppearance9M"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:maxLines="2"
+                android:visibility="gone"
+                tools:text="Сегодня\nв 21:00" />
+
+            <TextView
+                android:id="@+id/item_game_score"
+                style="@style/TextAppearance24M"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:maxLines="2"
+                android:visibility="gone"
+                tools:text="8 : 0" />
+
+        </ru.touchin.widget.Switcher>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

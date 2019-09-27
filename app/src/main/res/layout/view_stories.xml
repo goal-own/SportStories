@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    tools:parentTag="androidx.cardview.widget.CardView">
+
+    <FrameLayout
+        android:layout_width="80dp"
+        android:layout_height="112dp">
+
+        <ImageView
+            android:id="@+id/item_stories_background"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:ignore="contentDescription" />
+
+        <ImageView
+            android:id="@+id/item_stories_blur"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="72dp" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="72dp"
+            android:background="@color/global_black_30" />
+
+        <TextView
+            android:id="@+id/item_stories_text"
+            style="@style/TextAppearance12R"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="76dp"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:paddingStart="7dp"
+            android:paddingEnd="7dp"
+            android:textColor="@color/C0"
+            tools:text="Имя Фамилия" />
+
+    </FrameLayout>
+
+</merge>

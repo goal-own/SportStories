@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/C0"
+    android:fitsSystemWindows="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="126dp"
+            android:src="@drawable/ic_vk_blue_logo" />
+
+        <EditText
+            android:id="@+id/fragment_login_login"
+            style="@style/TextAppearance18R"
+            android:layout_width="match_parent"
+            android:layout_height="47dp"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="21dp"
+            android:layout_marginEnd="40dp"
+            android:background="@drawable/bg_input"
+            android:hint="@string/login_hint_login"
+            android:maxLines="1"
+            android:paddingStart="17dp"
+            android:paddingEnd="17dp"
+            android:textColor="@color/C1"
+            android:textColorHint="@color/C2" />
+
+        <EditText
+            android:id="@+id/fragment_login_password"
+            style="@style/TextAppearance18R"
+            android:layout_width="match_parent"
+            android:layout_height="47dp"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="42dp"
+            android:layout_marginEnd="40dp"
+            android:background="@drawable/bg_input"
+            android:hint="@string/login_hint_password"
+            android:inputType="textPassword"
+            android:maxLines="1"
+            android:paddingStart="17dp"
+            android:paddingEnd="17dp"
+            android:textColor="@color/C1"
+            android:textColorHint="@color/C2" />
+
+        <TextView
+            android:id="@+id/fragment_login_button"
+            style="@style/TextAppearance18R"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="42dp"
+            android:layout_marginEnd="40dp"
+            android:height="47dp"
+            android:background="@drawable/bg_action_button"
+            android:foreground="?selectableItemBackground"
+            android:gravity="center"
+            android:text="@string/login_button"
+            android:textAllCaps="true"
+            android:textColor="@color/C0" />
+
+    </LinearLayout>
+</ScrollView>

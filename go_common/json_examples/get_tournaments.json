@@ -1,0 +1,7 @@
+{
+  "tournaments" : Array<Tournament>,
+  "statusMessage": String,
+  "errorCode": Int,
+  "errorMessage": String
+
+}

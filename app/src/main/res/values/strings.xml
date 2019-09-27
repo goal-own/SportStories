@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Sports Stories</string>
+    <string name="login_button">Войти</string>
+    <string name="login_hint_login">Логин</string>
+    <string name="login_hint_password">Пароль</string>
+
+    <string name="stories_user_name_format">%s\n%s</string>
+    <string name="game_scores">%d : %d</string>
+
+    <string name="global_today">Сегодня</string>
+    <string name="global_yesterday">Вчера</string>
+    <string name="global_tomorrow">Завтра</string>
+
+    <string name="day_with_month">%s %s</string>
+    <string name="hours_and_minutes">%s:%s</string>
+
+    <string name="time_format_for_game">%s\nВ %s</string>
+</resources>

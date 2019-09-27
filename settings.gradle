@@ -1,0 +1,16 @@
+include ':app'
+include ':lifecycle-coroutines'
+include ':lifecycle'
+
+gradle.ext.roboswag = [
+        'utils',
+        'views',
+        'logging',
+        'kotlin-extensions',
+        'recyclerview-adapters'
+]
+
+gradle.ext.roboswag.forEach { module ->
+    include ":$module"
+    project(":$module").projectDir = file("RoboSwag/$module")
+}

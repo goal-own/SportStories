@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="16dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginEnd="16dp"
+    android:layout_marginBottom="8dp"
+    app:cardElevation="4dp"
+    app:cardCornerRadius="6dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp">
+
+        <TextView
+            android:id="@+id/item_news_preview_time"
+            style="@style/TextAppearance11R"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/C3"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="12:00" />
+
+        <TextView
+            android:id="@+id/item_news_preview_title"
+            style="@style/TextAppearance14R"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:textColor="@color/C5"
+            app:layout_constraintTop_toBottomOf="@id/item_news_preview_time"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="Какая-то новость. С кем-то там что-то произошло" />
+
+        <TextView
+            android:id="@+id/item_news_preview_reaction_desc"
+            style="@style/TextAppearance9R"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:ellipsize="end"
+            android:textColor="@color/C3"
+            app:layout_constraintTop_toBottomOf="@id/item_news_preview_title"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="Ответье на это первым" />
+
+        <TextView
+            android:id="@+id/item_news_preview_reactions_count"
+            style="@style/TextAppearance14R"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="12dp"
+            android:ellipsize="end"
+            android:textColor="@color/C3"
+            app:layout_constraintEnd_toStartOf="@id/item_news_preview_reaction_icon"
+            app:layout_constraintBottom_toBottomOf="@id/item_news_preview_reaction_icon"
+            app:layout_constraintTop_toTopOf="@id/item_news_preview_reaction_icon"
+            tools:text="2" />
+
+        <ImageView
+            android:id="@+id/item_news_preview_reaction_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:src="@drawable/ic_fire"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/item_news_preview_title"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:ignore="contentDescription" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>
