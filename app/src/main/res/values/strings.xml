@@ -15,4 +15,7 @@
     <string name="hours_and_minutes">%s:%s</string>
 
     <string name="time_format_for_game">%s\nВ %s</string>
+    <string name="welcome">Добро пожаловать в Sport Story Для продолжения необходима авторизация</string>
+    <string name="sport_story">Sport Story</string>
+    <string name="enter_with">Войти с</string>
 </resources>
