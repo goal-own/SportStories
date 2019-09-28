@@ -16,7 +16,7 @@ class StartScreenNavigation(router: AppRouter) : ScreenNavigation(router) {
         router.newRootScreen(SplashScreen())
     }
 
-    fun openMainScreen() {
+    fun openMainScreenAsRoot() {
         router.newRootScreen(MainScreen())
     }
 

@@ -6,12 +6,14 @@ object ApiPath {
 
         const val userId = "user_id"
         const val accessToken = "token"
+        const val sessionId = "session_id"
 
     }
 
     object Login {
 
         const val login = "session"
+        const val checkSession = "session/validate"
 
     }
 

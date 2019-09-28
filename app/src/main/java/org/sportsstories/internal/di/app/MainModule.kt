@@ -10,6 +10,7 @@ import org.sportsstories.internal.di.app.viewmodel.ViewModelKey
 import org.sportsstories.viewmodel.LoginViewModel
 import org.sportsstories.viewmodel.MainScreenViewModel
 import org.sportsstories.viewmodel.MainViewModel
+import org.sportsstories.viewmodel.SplashScreenViewModel
 
 @Module
 interface MainModule {
@@ -31,5 +32,10 @@ interface MainModule {
     @IntoMap
     @ViewModelKey(MainScreenViewModel::class)
     fun bindMainScreenViewModel(viewModel: MainScreenViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(SplashScreenViewModel::class)
+    fun bindSplashScreenViewModel(viewModel: SplashScreenViewModel): ViewModel
 
 }

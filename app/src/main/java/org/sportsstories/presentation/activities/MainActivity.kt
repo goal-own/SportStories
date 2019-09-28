@@ -3,7 +3,6 @@ package org.sportsstories.presentation.activities
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
 import com.vk.api.sdk.VK
 import com.vk.api.sdk.auth.VKAccessToken
 import com.vk.api.sdk.auth.VKAuthCallback
@@ -11,12 +10,17 @@ import org.sportsstories.R
 import org.sportsstories.domain.model.VkUser
 import org.sportsstories.internal.di.app.viewmodel.LifecycleViewModelProviders
 import org.sportsstories.internal.routing.navigator.RootNavigator
+import org.sportsstories.viewmodel.LoginViewModel
 import org.sportsstories.viewmodel.MainViewModel
 
 class MainActivity : AppCompatActivity() {
 
     private val viewModel by lazy {
         LifecycleViewModelProviders.of(this).get(MainViewModel::class.java)
+    }
+
+    private val loginViewModel by lazy {
+        LifecycleViewModelProviders.of(this).get(LoginViewModel::class.java)
     }
 
     private val navigator by lazy {
@@ -27,12 +31,7 @@ class MainActivity : AppCompatActivity() {
         setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        viewModel.openSplashThenStartScreens()
-
-        // TODO
-        viewModel.loginEvent.observe(this, Observer { event ->
-            // TODO 
-        })
+        viewModel.openSplash()
     }
 
     override fun onResumeFragments() {
@@ -48,7 +47,7 @@ class MainActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         val callback = object : VKAuthCallback {
             override fun onLogin(token: VKAccessToken) {
-                viewModel.onLogin(
+                loginViewModel.onLogin(
                         VkUser(
                                 token.userId ?: -1,
                                 token.accessToken
@@ -57,7 +56,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onLoginFailed(errorCode: Int) {
-                // TODO implement it
+                // Do nothing
             }
         }
         if (data == null || !VK.onActivityResult(requestCode, resultCode, data, callback)) {

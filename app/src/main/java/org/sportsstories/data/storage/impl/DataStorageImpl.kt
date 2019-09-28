@@ -3,10 +3,9 @@ package org.sportsstories.data.storage.impl
 import android.content.Context
 import com.squareup.moshi.Moshi
 import org.sportsstories.data.preferences.PreferenceFactory
-import org.sportsstories.data.preferences.entities.SessionId
 import org.sportsstories.data.preferences.property.MoshiProperty
 import org.sportsstories.data.storage.DataStorage
-import java.util.UUID
+import org.sportsstories.domain.model.User
 import java.util.concurrent.locks.ReentrantReadWriteLock
 import javax.inject.Inject
 import kotlin.concurrent.read
@@ -19,20 +18,20 @@ class DataStorageImpl @Inject constructor(
 
     private val lock = ReentrantReadWriteLock()
 
-    private val sessionProperty = MoshiProperty("sessionId", SessionId::class.java)
+    private val userProperty = MoshiProperty("user", User::class.java)
 
     init {
         PreferenceFactory.init(context, moshi)
     }
 
-    override fun storeSessionId(sessionId: UUID) {
+    override fun storeUser(user: User) {
         lock.write {
-            sessionProperty.write(SessionId((sessionId.toString())))
+            userProperty.write(user)
         }
     }
 
-    override fun loadSessionId(): UUID? = lock.read {
-        sessionProperty.read()?.id?.let { UUID.fromString(it) }
+    override fun loadUser(): User? = lock.read {
+        userProperty.read()
     }
 
 }
