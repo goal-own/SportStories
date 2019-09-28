@@ -15,7 +15,7 @@ android {
         versionCode 2
         versionName "1.0.1"
         // TODO change it
-        buildConfigField "String", "MIDDLE_URL", '"http://95.213.39.140:8080"'
+        buildConfigField "String", "MIDDLE_URL", '"http://95.213.39.140:8081"'
 
     }
 
@@ -157,6 +157,10 @@ dependencies {
 
     // Glide
     implementation "com.github.bumptech.glide:glide:$versions.glide"
+
+    // Permission dispatcher
+    implementation "com.github.hotchemi:permissionsdispatcher:$versions.permissionsDispatcherVersion"
+    kapt "com.github.hotchemi:permissionsdispatcher-processor:$versions.permissionsDispatcherVersion"
 
     // Test
     testImplementation "junit:junit:$versions.junit"

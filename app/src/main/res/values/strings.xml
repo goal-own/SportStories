@@ -15,4 +15,5 @@
     <string name="hours_and_minutes">%s:%s</string>
 
     <string name="time_format_for_game">%s\nВ %s</string>
+    <string name="choose_photo_from_gallery_title">Выберите фото</string>
 </resources>

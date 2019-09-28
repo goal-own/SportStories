@@ -2,7 +2,6 @@ package org.sportsstories.presentation.activities
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.vk.api.sdk.VK
@@ -12,7 +11,6 @@ import org.sportsstories.R
 import org.sportsstories.domain.model.VkUser
 import org.sportsstories.internal.di.app.viewmodel.LifecycleViewModelProviders
 import org.sportsstories.internal.routing.navigator.RootNavigator
-import org.sportsstories.lifecycle.event.ContentEvent
 import org.sportsstories.viewmodel.MainViewModel
 
 class MainActivity : AppCompatActivity() {
@@ -31,6 +29,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         viewModel.openSplashThenStartScreens()
 
+        // TODO
         viewModel.loginEvent.observe(this, Observer { event ->
             // TODO 
         })

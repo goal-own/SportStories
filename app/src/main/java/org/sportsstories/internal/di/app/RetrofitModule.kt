@@ -8,6 +8,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import org.sportsstories.BuildConfig
 import org.sportsstories.data.api.BaseApi
 import org.sportsstories.data.api.interceptors.ExceptionsInterceptor
+import org.sportsstories.data.api.json_adapters.DateTimeConverter
 import org.sportsstories.data.api.json_adapters.UUIDConverter
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -24,6 +25,7 @@ class RetrofitModule {
     fun provideMoshi(): Moshi = Moshi
             .Builder()
             .add(UUIDConverter())
+            .add(DateTimeConverter())
             .build()
 
     @Provides
