@@ -18,4 +18,5 @@
     <string name="welcome">Добро пожаловать в Sport Story Для продолжения необходима авторизация</string>
     <string name="sport_story">Sport Story</string>
     <string name="enter_with">Войти с</string>
+    <string name="choose_photo_from_gallery_title">Выберите фото</string>
 </resources>
