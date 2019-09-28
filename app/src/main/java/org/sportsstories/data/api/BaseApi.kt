@@ -20,4 +20,9 @@ interface BaseApi {
             @Body array: ByteArray
     )
 
+    @GET(ApiPath.Login.checkSession)
+    suspend fun checkSessionId(
+            @Query(ApiPath.PlaceHolder.sessionId) sessionId: String
+    ): BaseResponseNW<Boolean>
+
 }

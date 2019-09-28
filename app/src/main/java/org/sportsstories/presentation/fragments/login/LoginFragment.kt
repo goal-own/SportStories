@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
+import com.vk.api.sdk.VK
 import kotlinx.android.synthetic.main.fragment_login.fragment_login_button
 import kotlinx.android.synthetic.main.fragment_login.fragment_login_logo
 import org.sportsstories.R
@@ -18,6 +19,7 @@ import org.sportsstories.internal.di.app.viewmodel.LifecycleViewModelProviders
 import org.sportsstories.lifecycle.event.ContentEvent
 import org.sportsstories.presentation.fragments.BaseFragment
 import org.sportsstories.utils.SequenceGenerator
+import org.sportsstories.viewmodel.LoginViewModel
 import org.sportsstories.viewmodel.MainViewModel
 import permissions.dispatcher.NeedsPermission
 import ru.touchin.extensions.setOnRippleClickListener
@@ -35,8 +37,12 @@ class LoginFragment : BaseFragment() {
 
     }
 
-    val viewModel by lazy {
+    private val viewModel by lazy {
         LifecycleViewModelProviders.of(this).get(MainViewModel::class.java)
+    }
+
+    private val loginViewModel by lazy {
+        LifecycleViewModelProviders.of(this).get(LoginViewModel::class.java)
     }
 
     override fun onCreateView(
@@ -53,17 +59,25 @@ class LoginFragment : BaseFragment() {
 
     private fun initViews() {
         fragment_login_button.setOnRippleClickListener {
-            openGallery()
+            VK.login(requireActivity())
         }
     }
 
     private fun initObservers() {
+        loginViewModel.loginEvent.observe(this, Observer { event ->
+            when (event) {
+                is ContentEvent.Success -> loginViewModel.openMainScreen()
+                is ContentEvent.Error -> Toast.makeText(activity, "Can't log in", Toast.LENGTH_LONG).show()
+            }
+        })
+        // TODO MOVE IT TO STORIES SHOT FRAGMENT
         viewModel.fileChoosenEvent.observe(this, Observer { event ->
             when (event) {
                 is ContentEvent.Success -> viewModel.sendPhoto(event.data.fullPath)
                 is ContentEvent.Error -> Toast.makeText(context, event.throwable.message, Toast.LENGTH_LONG).show()
             }
         })
+        // TODO MOVE IT TO STORIES SHOT FRAGMENT
         viewModel.photo.observe(this, Observer { event ->
             when (event) {
                 is ContentEvent.Success -> Glide.with(this)
@@ -74,6 +88,7 @@ class LoginFragment : BaseFragment() {
         })
     }
 
+    // TODO MOVE IT TO STORIES SHOT FRAGMENT
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
@@ -83,6 +98,7 @@ class LoginFragment : BaseFragment() {
         }
     }
 
+    // TODO MOVE IT TO STORIES SHOT FRAGMENT
     @NeedsPermission(Manifest.permission.CAMERA)
     fun openCameraInternal(intent: Intent) {
         if (activity?.canLaunchIntent(intent) == true) {
@@ -90,6 +106,7 @@ class LoginFragment : BaseFragment() {
         }
     }
 
+    // TODO MOVE IT TO STORIES SHOT FRAGMENT
     private fun openGallery() {
         startActivityForResult(
                 Intent.createChooser(
@@ -100,7 +117,7 @@ class LoginFragment : BaseFragment() {
         )
     }
 
-    // TODO REMOVE it
+    // TODO MOVE IT TO STORIES SHOT FRAGMENT
     private fun getFileChooserIntent() =
             Intent(Intent.ACTION_GET_CONTENT)
                     .apply {

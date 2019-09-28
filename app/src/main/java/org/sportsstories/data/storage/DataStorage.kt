@@ -1,10 +1,10 @@
 package org.sportsstories.data.storage
 
-import java.util.UUID
+import org.sportsstories.domain.model.User
 
 interface DataStorage {
 
-    fun storeSessionId(sessionId: UUID)
-    fun loadSessionId(): UUID?
+    fun storeUser(user: User)
+    fun loadUser(): User?
 
 }

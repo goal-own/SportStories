@@ -15,7 +15,7 @@ android {
         versionCode 2
         versionName "1.0.1"
         // TODO change it
-        buildConfigField "String", "MIDDLE_URL", '"http://95.213.39.140:8081"'
+        buildConfigField "String", "MIDDLE_URL", '"http://95.213.39.140:8080"'
 
     }
 
