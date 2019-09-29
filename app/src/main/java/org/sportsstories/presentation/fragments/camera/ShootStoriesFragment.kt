@@ -15,19 +15,27 @@ import androidx.camera.core.ImageCaptureConfig
 import androidx.camera.core.Preview
 import androidx.camera.core.PreviewConfig
 import androidx.core.content.ContextCompat
+import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_shoot_strories.fragment_shoot_stories_button
 import kotlinx.android.synthetic.main.fragment_shoot_strories.fragment_shoot_stories_button_container
+import kotlinx.android.synthetic.main.fragment_shoot_strories.fragment_shoot_stories_button_papper
 import kotlinx.android.synthetic.main.fragment_shoot_strories.fragment_shoot_stories_button_upload_button
 import kotlinx.android.synthetic.main.fragment_shoot_strories.fragment_shoot_stories_button_upload_container
 import kotlinx.android.synthetic.main.fragment_shoot_strories.fragment_shoot_stories_close
 import kotlinx.android.synthetic.main.fragment_shoot_strories.fragment_shoot_stories_loading_bar
+import kotlinx.android.synthetic.main.fragment_shoot_strories.fragment_shoot_stories_news
 import kotlinx.android.synthetic.main.fragment_shoot_strories.fragment_shoot_stories_picture
 import kotlinx.android.synthetic.main.fragment_shoot_strories.fragment_shoot_stories_view_finder
+import kotlinx.android.synthetic.main.item_news_preview.view.item_news_preview_reactions_count
+import kotlinx.android.synthetic.main.item_news_preview.view.item_news_preview_time
+import kotlinx.android.synthetic.main.item_news_preview.view.item_news_preview_title
 import org.sportsstories.R
+import org.sportsstories.domain.model.NewsPreview
+import org.sportsstories.extensions.toTimeString
 import org.sportsstories.internal.di.app.viewmodel.LifecycleViewModelProviders
 import org.sportsstories.lifecycle.event.ContentEvent
 import org.sportsstories.presentation.fragments.BaseFragment
@@ -40,7 +48,7 @@ import ru.touchin.roboswag.components.utils.UiUtils
 import java.io.File
 
 @RuntimePermissions
-class ShootStoriesFragment : BaseFragment() {
+class ShootStoriesFragment : BaseFragment(), NewsBottomSheet.NewsChooseListener {
 
     companion object {
 
@@ -75,7 +83,11 @@ class ShootStoriesFragment : BaseFragment() {
     }
 
     @SuppressLint("NeedOnRequestPermissionsResult")
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+            requestCode: Int,
+            permissions: Array<out String>,
+            grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         onRequestPermissionsResult(requestCode, grantResults)
     }
@@ -90,9 +102,21 @@ class ShootStoriesFragment : BaseFragment() {
         restoreState(::currentState::set)
     }
 
+    override fun onNewsChoosed(news: NewsPreview) {
+        with(fragment_shoot_stories_news) {
+            isVisible = true
+            item_news_preview_time.text = news.date.toTimeString(context)
+            item_news_preview_title.text = news.title
+            item_news_preview_reactions_count.text = news.reactionsCount.toString()
+        }
+    }
+
     @NeedsPermission(Manifest.permission.CAMERA)
     fun openCameraInternal() {
-        val rational = Rational(fragment_shoot_stories_view_finder.width, fragment_shoot_stories_view_finder.height)
+        val rational = Rational(
+                fragment_shoot_stories_view_finder.width,
+                fragment_shoot_stories_view_finder.height
+        )
         val imageCaptureConfig = ImageCaptureConfig.Builder()
                 .apply {
                     setTargetAspectRatio(rational)
@@ -101,7 +125,12 @@ class ShootStoriesFragment : BaseFragment() {
         val imageCapture = ImageCapture(imageCaptureConfig)
         val previewConfig = PreviewConfig.Builder().apply {
             setTargetAspectRatio(rational)
-            setTargetResolution(Size(fragment_shoot_stories_view_finder.width, fragment_shoot_stories_view_finder.height))
+            setTargetResolution(
+                    Size(
+                            fragment_shoot_stories_view_finder.width,
+                            fragment_shoot_stories_view_finder.height
+                    )
+            )
         }.build()
         val preview = Preview(previewConfig)
         val parent = fragment_shoot_stories_view_finder.parent as ViewGroup
@@ -144,6 +173,9 @@ class ShootStoriesFragment : BaseFragment() {
         fragment_shoot_stories_button_upload_button.setOnRippleClickListener {
             viewModel.sendPhoto()
         }
+        fragment_shoot_stories_button_papper.setOnRippleClickListener {
+            NewsBottomSheet.show(this)
+        }
     }
 
     private fun onShootSuccess(file: File) {
@@ -170,19 +202,22 @@ class ShootStoriesFragment : BaseFragment() {
         fragment_shoot_stories_view_finder.isVisible = state == State.CAMERA
         if (state == State.CAMERA) {
             setBottomNavigationVisibility(true)
+            fragment_shoot_stories_news.isGone = true
         } else if (state == State.PICTURE) {
             setBottomNavigationVisibility(false)
         }
     }
 
     private fun setBottomNavigationVisibility(visible: Boolean) {
-        val desiredTranslation = if (visible) navigationTranslationY else shownNavigationTranslationY
+        val desiredTranslation =
+                if (visible) navigationTranslationY else shownNavigationTranslationY
         if (desiredTranslation == fragment_shoot_stories_button_container.translationY) return
         fragment_shoot_stories_button_container
                 .animate()
                 .translationY(desiredTranslation)
                 .start()
-        val desiredTranslation2 = if (visible) shownNavigationTranslationY else navigationTranslationY
+        val desiredTranslation2 =
+                if (visible) shownNavigationTranslationY else navigationTranslationY
         if (desiredTranslation == fragment_shoot_stories_button_container.translationY) return
         fragment_shoot_stories_button_upload_container
                 .animate()

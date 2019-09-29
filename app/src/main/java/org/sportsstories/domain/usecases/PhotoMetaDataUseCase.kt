@@ -14,7 +14,7 @@ class PhotoMetaDataUseCase @Inject constructor(
 ) {
 
     companion object {
-        private const val fileExtension = "jpeg"
+        private const val fileExtension = "jpg"
         private const val elsePhotosPath = "else"
     }
 
