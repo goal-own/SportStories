@@ -3,6 +3,7 @@ package org.sportsstories.domain.repository
 import kotlinx.coroutines.Deferred
 import org.sportsstories.data.api.BaseApi
 import org.sportsstories.domain.model.Stories
+import org.sportsstories.presentation.base.stories.StoriesItem
 import org.sportsstories.utils.async
 import javax.inject.Inject
 
@@ -14,8 +15,8 @@ class StoriesRepository @Inject constructor(
             baseApi.uploadStories(sessionId, byteArray)
 
     //TODO (Remove mock method)
-    fun getStoriesAsync(): Deferred<List<Stories>> = async {
-        list
+    fun getStoriesAsync(): Deferred<List<StoriesItem>> = async {
+        listOf(StoriesItem.AddStories) + list.map { StoriesItem.FriendsStories(it) }
     }
 
     private val fnames = listOf("Ann", "Max", "Alex", "Pasha", "Lesha", "Rus")
