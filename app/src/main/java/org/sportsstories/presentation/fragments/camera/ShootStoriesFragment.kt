@@ -1,7 +1,9 @@
 package org.sportsstories.presentation.fragments.camera
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.os.Parcelable
 import android.util.Rational
 import android.util.Size
 import android.view.LayoutInflater
@@ -15,20 +17,26 @@ import androidx.camera.core.Preview
 import androidx.camera.core.PreviewConfig
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
+import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_shoot_strories.fragment_shoot_stories_button
+import kotlinx.android.synthetic.main.fragment_shoot_strories.fragment_shoot_stories_button_container
+import kotlinx.android.synthetic.main.fragment_shoot_strories.fragment_shoot_stories_button_upload_container
+import kotlinx.android.synthetic.main.fragment_shoot_strories.fragment_shoot_stories_close
 import kotlinx.android.synthetic.main.fragment_shoot_strories.fragment_shoot_stories_loading_bar
 import kotlinx.android.synthetic.main.fragment_shoot_strories.fragment_shoot_stories_picture
 import kotlinx.android.synthetic.main.fragment_shoot_strories.fragment_shoot_stories_view_finder
 import org.sportsstories.R
 import org.sportsstories.internal.di.app.viewmodel.LifecycleViewModelProviders
+import org.sportsstories.lifecycle.event.ContentEvent
 import org.sportsstories.presentation.fragments.BaseFragment
-import org.sportsstories.utils.SequenceGenerator
 import org.sportsstories.viewmodel.ShootStoriesViewModel
 import permissions.dispatcher.NeedsPermission
 import permissions.dispatcher.OnNeverAskAgain
 import permissions.dispatcher.RuntimePermissions
 import ru.touchin.extensions.setOnRippleClickListener
+import ru.touchin.roboswag.components.utils.UiUtils
 import java.io.File
 
 @RuntimePermissions
@@ -37,12 +45,18 @@ class ShootStoriesFragment : BaseFragment() {
     companion object {
 
         fun newInstance() = ShootStoriesFragment()
-        private val TAKE_PHOTO_REQUEST_CODE = SequenceGenerator.nextInt()
 
     }
 
+    private var currentState = State.LOADING
+
     private val viewModel by lazy {
         LifecycleViewModelProviders.of(this).get(ShootStoriesViewModel::class.java)
+    }
+
+    private val hiddenLoyaltyBottomNavigationTranslationY = 0F
+    private val shownLoyaltyBottomNavigationTranslationY by lazy(LazyThreadSafetyMode.NONE) {
+        UiUtils.OfMetrics.dpToPixels(requireContext(), 130f)
     }
 
     override fun onCreateView(
@@ -54,21 +68,39 @@ class ShootStoriesFragment : BaseFragment() {
         activity?.window?.statusBarColor = ContextCompat.getColor(it.context, R.color.C8)
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initObservers()
+        initViews()
+    }
+
+    @SuppressLint("NeedOnRequestPermissionsResult")
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         onRequestPermissionsResult(requestCode, grantResults)
     }
 
+    override fun onPause() {
+        super.onPause()
+        saveState(currentState)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        restoreState(::currentState::set)
+    }
+
     @NeedsPermission(Manifest.permission.CAMERA)
     fun openCameraInternal() {
+        val rational = Rational(fragment_shoot_stories_view_finder.width, fragment_shoot_stories_view_finder.height)
         val imageCaptureConfig = ImageCaptureConfig.Builder()
                 .apply {
-                    setTargetAspectRatio(Rational(fragment_shoot_stories_view_finder.width, fragment_shoot_stories_view_finder.height))
+                    setTargetAspectRatio(rational)
                     setCaptureMode(ImageCapture.CaptureMode.MIN_LATENCY)
                 }.build()
         val imageCapture = ImageCapture(imageCaptureConfig)
         val previewConfig = PreviewConfig.Builder().apply {
-            setTargetAspectRatio(Rational(fragment_shoot_stories_view_finder.width, fragment_shoot_stories_view_finder.height))
+            setTargetAspectRatio(rational)
             setTargetResolution(Size(fragment_shoot_stories_view_finder.width, fragment_shoot_stories_view_finder.height))
         }.build()
         val preview = Preview(previewConfig)
@@ -86,8 +118,24 @@ class ShootStoriesFragment : BaseFragment() {
         CameraX.bindToLifecycle(this, preview, imageCapture)
     }
 
+    private fun initObservers() {
+        viewModel.uploadEvent.observe(this, Observer { event ->
+            when (event) {
+                is ContentEvent.Success -> context?.let { Toast.makeText(it, "Success", Toast.LENGTH_LONG).show() }
+                is ContentEvent.Error -> context?.let { Toast.makeText(it, "Error", Toast.LENGTH_LONG).show() }
+            }
+        })
+    }
+
     private fun initCamera() {
         openCameraInternalWithPermissionCheck()
+    }
+
+    private fun initViews() {
+        fragment_shoot_stories_close.setOnRippleClickListener {
+            if (currentState == State.PICTURE) setState(State.CAMERA)
+            else if (currentState == State.CAMERA) viewModel.back()
+        }
     }
 
     private fun onShootSuccess(file: File) {
@@ -95,11 +143,10 @@ class ShootStoriesFragment : BaseFragment() {
         Glide.with(this)
                 .load(file)
                 .into(fragment_shoot_stories_picture)
-        Toast.makeText(requireContext(), "Saved", Toast.LENGTH_LONG).show()
     }
 
     private fun onShootError() {
-        Toast.makeText(requireContext(), "Error", Toast.LENGTH_LONG).show()
+        setState(State.CAMERA)
     }
 
     @OnNeverAskAgain
@@ -108,12 +155,34 @@ class ShootStoriesFragment : BaseFragment() {
     }
 
     private fun setState(state: State) {
+        currentState = state
         fragment_shoot_stories_picture.isVisible = state == State.PICTURE
         fragment_shoot_stories_loading_bar.isVisible = state == State.LOADING
         fragment_shoot_stories_view_finder.isVisible = state == State.CAMERA
+        if (state == State.CAMERA) {
+            setBottomNavigationVisibility(true)
+        } else if (state == State.PICTURE) {
+            setBottomNavigationVisibility(false)
+        }
     }
 
-    private enum class State {
+    private fun setBottomNavigationVisibility(visible: Boolean) {
+        val desiredTranslation = if (visible) hiddenLoyaltyBottomNavigationTranslationY else shownLoyaltyBottomNavigationTranslationY
+        if (desiredTranslation == fragment_shoot_stories_button_container.translationY) return
+        fragment_shoot_stories_button_container
+                .animate()
+                .translationY(desiredTranslation)
+                .start()
+        val desiredTranslation2 = if (visible) shownLoyaltyBottomNavigationTranslationY else hiddenLoyaltyBottomNavigationTranslationY
+        if (desiredTranslation == fragment_shoot_stories_button_container.translationY) return
+        fragment_shoot_stories_button_upload_container
+                .animate()
+                .translationY(desiredTranslation2)
+                .start()
+    }
+
+    @Parcelize
+    private enum class State : Parcelable {
         LOADING, CAMERA, PICTURE
     }
 
