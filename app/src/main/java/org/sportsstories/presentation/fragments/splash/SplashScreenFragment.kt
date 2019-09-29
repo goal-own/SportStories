@@ -27,12 +27,18 @@ class SplashScreenFragment : Fragment() {
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
-    ): View? =
-            inflater.inflate(R.layout.fragment_splash, container, false)
+    ): View? = inflater.inflate(R.layout.fragment_splash, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initObservers()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.isSessionIdActiveEvent.value?.data?.let { isSessionActive ->
+            viewModel.openLoginOrMainScreen(isSessionActive)
+        }
     }
 
     private fun initObservers() {

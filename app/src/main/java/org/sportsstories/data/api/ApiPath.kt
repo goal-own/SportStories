@@ -19,7 +19,7 @@ object ApiPath {
 
     object Stories {
 
-        const val upload = "media/submit-image"
+        const val upload = "media/submit_image"
 
     }
 

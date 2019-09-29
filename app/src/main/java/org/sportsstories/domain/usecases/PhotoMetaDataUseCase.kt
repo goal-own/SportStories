@@ -22,6 +22,7 @@ class PhotoMetaDataUseCase @Inject constructor(
         val id = identityGenerator.generateUniqueString()
         val fileName = "$id.$fileExtension"
         val relativePath = if (hidden) "$elsePhotosPath/$fileName" else fileName
+        photoFileResourceManager.cleanDir(directoryName)
         val dataDir = photoFileResourceManager.getPhotosDirectoryById(directoryName)
         val filePathData = FilePathData(id, File(dataDir, relativePath), relativePath, fileName)
         prepareFile(filePathData.file)

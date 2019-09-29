@@ -46,15 +46,19 @@ class MainScreenViewModel @Inject constructor(
         rootScreenNavigation.start.openShootStoriesScreen()
     }
 
-    fun fetchInitialNews() {
+    fun fetchInitialNews(withDates: Boolean = true) {
         async {
-            newsRepository
+            if (withDates) newsRepository
                     .fetchNewsPreviewsAsync()
                     .await()
                     .groupBy { it.date.toLocalDate() }
                     .flatMap {
                         listOf(NewsListItem.DateItem(it.key)) + it.value.map(NewsListItem::NewsItem)
                     }
+            else newsRepository
+                    .fetchNewsPreviewsAsync()
+                    .await()
+                    .map(NewsListItem::NewsItem)
         }.dispatchTo(_news)
     }
 
