@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import kotlinx.android.synthetic.main.main_fragment.main_fragment_games
 import kotlinx.android.synthetic.main.main_fragment.main_fragment_news
 import kotlinx.android.synthetic.main.main_fragment.main_fragment_stories
@@ -32,7 +33,9 @@ class MainFragment : BaseFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
-            inflater.inflate(R.layout.main_fragment, container, false)
+            inflater.inflate(R.layout.main_fragment, container, false).also {
+                activity?.window?.statusBarColor = ContextCompat.getColor(it.context, R.color.C1)
+            }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -48,6 +51,10 @@ class MainFragment : BaseFragment() {
         main_fragment_games.adapter = gamesAdapter
         main_fragment_news.adapter = newsAdapter
         main_fragment_games.addItemDecoration(GridMarginDecorations(UiUtils.OfMetrics.dpToPixels(requireContext(), 8f).toInt()))
+        storiesAdapter.itemClickListener = { item, viewHolder ->
+            // TODO open stories
+            viewModel.openShootStoriesScreen()
+        }
     }
 
     private fun initObservers() {

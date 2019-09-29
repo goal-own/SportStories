@@ -7,6 +7,7 @@ import org.sportsstories.domain.model.Stories
 import org.sportsstories.domain.repository.GamesRepository
 import org.sportsstories.domain.repository.NewsRepository
 import org.sportsstories.domain.repository.StoriesRepository
+import org.sportsstories.internal.routing.navigation.root.RootScreenNavigation
 import org.sportsstories.lifecycle.event.ContentEvent
 import org.sportsstories.lifecycle_coroutines.CoroutinesViewModel
 import org.sportsstories.presentation.base.news.NewsListItem
@@ -14,6 +15,7 @@ import org.sportsstories.utils.async
 import javax.inject.Inject
 
 class MainScreenViewModel @Inject constructor(
+        private val rootScreenNavigation: RootScreenNavigation,
         private val storiesRepository: StoriesRepository,
         private val gamesRepository: GamesRepository,
         private val newsRepository: NewsRepository
@@ -38,6 +40,10 @@ class MainScreenViewModel @Inject constructor(
 
     fun fetchGames() {
         gamesRepository.getGamesAsync().dispatchTo(_games)
+    }
+
+    fun openShootStoriesScreen() {
+        rootScreenNavigation.start.openShootStoriesScreen()
     }
 
     fun fetchInitialNews() {

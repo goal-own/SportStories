@@ -1,5 +1,6 @@
 package org.sportsstories.internal.routing
 
+import org.sportsstories.presentation.fragments.camera.ShootStoriesFragment
 import org.sportsstories.presentation.fragments.login.LoginFragment
 import org.sportsstories.presentation.fragments.main.MainFragment
 import org.sportsstories.presentation.fragments.splash.SplashScreenFragment
@@ -15,4 +16,8 @@ class SplashScreen : SupportAppScreen() {
 
 class MainScreen : SupportAppScreen() {
     override fun getFragment() = MainFragment.newInstance()
+}
+
+class ShootStoriesScreen : SupportAppScreen() {
+    override fun getFragment() = ShootStoriesFragment.newInstance()
 }
