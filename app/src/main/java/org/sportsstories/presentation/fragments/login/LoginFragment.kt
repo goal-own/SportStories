@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.lifecycle.Observer
 import com.vk.api.sdk.VK
 import kotlinx.android.synthetic.main.fragment_login.fragment_login_button
@@ -49,7 +48,7 @@ class LoginFragment : BaseFragment() {
         viewModel.loginEvent.observe(this, Observer { event ->
             when (event) {
                 is ContentEvent.Success -> viewModel.openMainScreen()
-                is ContentEvent.Error -> Toast.makeText(activity, "Can't log in", Toast.LENGTH_LONG).show()
+                is ContentEvent.Error -> showErrorSnackbar("Не удалось авторизоваться. Попробуйте еще раз")
             }
         })
     }

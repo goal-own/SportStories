@@ -34,7 +34,7 @@ class MainFragment : BaseFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
             inflater.inflate(R.layout.main_fragment, container, false).also {
-                activity?.window?.statusBarColor = ContextCompat.getColor(it.context, R.color.C1)
+                activity?.window?.statusBarColor = ContextCompat.getColor(it.context, R.color.C5)
             }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -52,6 +52,10 @@ class MainFragment : BaseFragment() {
         main_fragment_news.adapter = newsAdapter
         main_fragment_games.addItemDecoration(GridMarginDecorations(UiUtils.OfMetrics.dpToPixels(requireContext(), 8f).toInt()))
         storiesAdapter.itemClickListener = { item, viewHolder ->
+            // TODO open stories
+            viewModel.openShootStoriesScreen()
+        }
+        newsAdapter.itemClickListener = { item, viewHolder ->
             // TODO open stories
             viewModel.openShootStoriesScreen()
         }

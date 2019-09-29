@@ -19,6 +19,10 @@ class PhotoFileResourceManagerImpl @Inject constructor(
         return File(filesDir, id)
     }
 
+    override fun cleanDir(path: String) {
+        File(path).deleteRecursively()
+    }
+
     private val filesDir: File
         get() = File(resourceManager.getInternalFileStoragePath(), STORIES_DIR)
 

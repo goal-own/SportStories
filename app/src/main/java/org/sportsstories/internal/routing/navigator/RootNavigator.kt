@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentTransaction
 import org.sportsstories.R
+import org.sportsstories.presentation.fragments.camera.ShootStoriesFragment
 import org.sportsstories.presentation.fragments.splash.SplashScreenFragment
 import ru.terrakok.cicerone.commands.Command
 
@@ -22,6 +23,7 @@ class RootNavigator(
         when (currentFragment) {
             is SplashScreenFragment -> fragmentTransaction.fade()
         }
+        if (nextFragment is ShootStoriesFragment) fragmentTransaction.slideFromBottom()
     }
 
     private fun FragmentTransaction.slide(withEnter: Boolean = true) {

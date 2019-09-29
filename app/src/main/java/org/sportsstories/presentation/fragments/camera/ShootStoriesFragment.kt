@@ -9,7 +9,6 @@ import android.util.Size
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.camera.core.CameraX
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureConfig
@@ -22,6 +21,7 @@ import com.bumptech.glide.Glide
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_shoot_strories.fragment_shoot_stories_button
 import kotlinx.android.synthetic.main.fragment_shoot_strories.fragment_shoot_stories_button_container
+import kotlinx.android.synthetic.main.fragment_shoot_strories.fragment_shoot_stories_button_upload_button
 import kotlinx.android.synthetic.main.fragment_shoot_strories.fragment_shoot_stories_button_upload_container
 import kotlinx.android.synthetic.main.fragment_shoot_strories.fragment_shoot_stories_close
 import kotlinx.android.synthetic.main.fragment_shoot_strories.fragment_shoot_stories_loading_bar
@@ -54,8 +54,8 @@ class ShootStoriesFragment : BaseFragment() {
         LifecycleViewModelProviders.of(this).get(ShootStoriesViewModel::class.java)
     }
 
-    private val hiddenLoyaltyBottomNavigationTranslationY = 0F
-    private val shownLoyaltyBottomNavigationTranslationY by lazy(LazyThreadSafetyMode.NONE) {
+    private val navigationTranslationY = 0F
+    private val shownNavigationTranslationY by lazy(LazyThreadSafetyMode.NONE) {
         UiUtils.OfMetrics.dpToPixels(requireContext(), 130f)
     }
 
@@ -121,8 +121,13 @@ class ShootStoriesFragment : BaseFragment() {
     private fun initObservers() {
         viewModel.uploadEvent.observe(this, Observer { event ->
             when (event) {
-                is ContentEvent.Success -> context?.let { Toast.makeText(it, "Success", Toast.LENGTH_LONG).show() }
-                is ContentEvent.Error -> context?.let { Toast.makeText(it, "Error", Toast.LENGTH_LONG).show() }
+                is ContentEvent.Success -> {
+                    showInfoSnackbar("Фото успешно загружено")
+                    viewModel.back()
+                }
+                is ContentEvent.Error -> {
+                    showInfoSnackbar("Не удалось загрузить фото")
+                }
             }
         })
     }
@@ -136,9 +141,13 @@ class ShootStoriesFragment : BaseFragment() {
             if (currentState == State.PICTURE) setState(State.CAMERA)
             else if (currentState == State.CAMERA) viewModel.back()
         }
+        fragment_shoot_stories_button_upload_button.setOnRippleClickListener {
+            viewModel.sendPhoto()
+        }
     }
 
     private fun onShootSuccess(file: File) {
+
         setState(State.PICTURE)
         Glide.with(this)
                 .load(file)
@@ -167,13 +176,13 @@ class ShootStoriesFragment : BaseFragment() {
     }
 
     private fun setBottomNavigationVisibility(visible: Boolean) {
-        val desiredTranslation = if (visible) hiddenLoyaltyBottomNavigationTranslationY else shownLoyaltyBottomNavigationTranslationY
+        val desiredTranslation = if (visible) navigationTranslationY else shownNavigationTranslationY
         if (desiredTranslation == fragment_shoot_stories_button_container.translationY) return
         fragment_shoot_stories_button_container
                 .animate()
                 .translationY(desiredTranslation)
                 .start()
-        val desiredTranslation2 = if (visible) shownLoyaltyBottomNavigationTranslationY else hiddenLoyaltyBottomNavigationTranslationY
+        val desiredTranslation2 = if (visible) shownNavigationTranslationY else navigationTranslationY
         if (desiredTranslation == fragment_shoot_stories_button_container.translationY) return
         fragment_shoot_stories_button_upload_container
                 .animate()

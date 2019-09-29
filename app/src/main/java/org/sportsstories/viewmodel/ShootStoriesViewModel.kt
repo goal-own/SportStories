@@ -4,7 +4,6 @@ import androidx.camera.core.ImageCapture
 import androidx.lifecycle.MutableLiveData
 import org.sportsstories.domain.usecases.CameraUseCase
 import org.sportsstories.domain.usecases.PhotoMetaDataUseCase
-import org.sportsstories.extensions.toByteArray
 import org.sportsstories.internal.routing.navigation.root.RootScreenNavigation
 import org.sportsstories.lifecycle.event.ContentEvent
 import org.sportsstories.lifecycle_coroutines.CoroutinesViewModel
@@ -33,10 +32,12 @@ class ShootStoriesViewModel @Inject constructor(
         imageCapture.takePicture(file, OnImageSavedListener(onSuccess, onError))
     }
 
-    fun sendPhoto(file: File) {
-        cameraUseCase
-                .uploadPhotoAsync(file.toByteArray())
-                .dispatchTo(uploadEvent)
+    fun sendPhoto() {
+        savedFile?.let { file ->
+            cameraUseCase
+                    .uploadPhotoAsync(file.readBytes())
+                    .dispatchTo(uploadEvent)
+        }
     }
 
     fun back() {
@@ -49,7 +50,6 @@ class ShootStoriesViewModel @Inject constructor(
     ) : ImageCapture.OnImageSavedListener {
         override fun onImageSaved(file: File) {
             savedFile = file
-            sendPhoto(file)
             onSuccess.invoke(file)
         }
 

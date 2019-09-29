@@ -10,7 +10,8 @@ class StoriesRepository @Inject constructor(
         private val baseApi: BaseApi
 ) {
 
-    suspend fun uploadStories(byteArray: ByteArray) = baseApi.uploadStories(byteArray)
+    suspend fun uploadStories(sessionId: String, byteArray: ByteArray) =
+            baseApi.uploadStories(sessionId, byteArray)
 
     //TODO (Remove mock method)
     fun getStoriesAsync(): Deferred<List<Stories>> = async {

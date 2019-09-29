@@ -17,7 +17,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toTopOf="@id/fragment_shoot_stories_bottom_container">
 
-        <ImageView
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fragment_shoot_stories_close"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -28,7 +28,8 @@
             android:clickable="true"
             android:focusable="true"
             android:src="@drawable/ic_close"
-            android:tint="@color/C0" />
+            android:tint="@color/C8"
+            app:backgroundTint="@color/C0" />
 
         <ru.touchin.roboswag.components.views.MaterialLoadingBar
             android:id="@+id/fragment_shoot_stories_loading_bar"
