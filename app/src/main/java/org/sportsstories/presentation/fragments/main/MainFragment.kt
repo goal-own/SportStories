@@ -14,6 +14,7 @@ import org.sportsstories.lifecycle_coroutines.extensions.observeLiveData
 import org.sportsstories.presentation.base.games.GamesAdapter
 import org.sportsstories.presentation.base.news.NewsAdapter
 import org.sportsstories.presentation.base.stories.StoriesAdapter
+import org.sportsstories.presentation.base.stories.StoriesItem
 import org.sportsstories.presentation.decorators.GridMarginDecorations
 import org.sportsstories.presentation.fragments.BaseFragment
 import org.sportsstories.viewmodel.MainScreenViewModel
@@ -51,13 +52,14 @@ class MainFragment : BaseFragment() {
         main_fragment_games.adapter = gamesAdapter
         main_fragment_news.adapter = newsAdapter
         main_fragment_games.addItemDecoration(GridMarginDecorations(UiUtils.OfMetrics.dpToPixels(requireContext(), 8f).toInt()))
-        storiesAdapter.itemClickListener = { item, viewHolder ->
-            // TODO open stories
-            viewModel.openShootStoriesScreen()
+        storiesAdapter.itemClickListener = { item, _ ->
+            if (item is StoriesItem.AddStories) {
+                viewModel.openShootStoriesScreen()
+            }
         }
-        newsAdapter.itemClickListener = { item, viewHolder ->
+        newsAdapter.itemClickListener = { _, _ ->
             // TODO open stories
-            viewModel.openShootStoriesScreen()
+            //viewModel.openShootStoriesScreen()
         }
     }
 
