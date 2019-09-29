@@ -15,26 +15,39 @@ import androidx.camera.core.ImageCaptureConfig
 import androidx.camera.core.Preview
 import androidx.camera.core.PreviewConfig
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getColor
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_shoot_strories.fragment_shoot_stories_button
+import kotlinx.android.synthetic.main.fragment_shoot_strories.fragment_shoot_stories_button_ball
 import kotlinx.android.synthetic.main.fragment_shoot_strories.fragment_shoot_stories_button_container
 import kotlinx.android.synthetic.main.fragment_shoot_strories.fragment_shoot_stories_button_papper
 import kotlinx.android.synthetic.main.fragment_shoot_strories.fragment_shoot_stories_button_upload_button
 import kotlinx.android.synthetic.main.fragment_shoot_strories.fragment_shoot_stories_button_upload_container
 import kotlinx.android.synthetic.main.fragment_shoot_strories.fragment_shoot_stories_close
+import kotlinx.android.synthetic.main.fragment_shoot_strories.fragment_shoot_stories_game_info
 import kotlinx.android.synthetic.main.fragment_shoot_strories.fragment_shoot_stories_loading_bar
 import kotlinx.android.synthetic.main.fragment_shoot_strories.fragment_shoot_stories_news
 import kotlinx.android.synthetic.main.fragment_shoot_strories.fragment_shoot_stories_picture
 import kotlinx.android.synthetic.main.fragment_shoot_strories.fragment_shoot_stories_view_finder
+import kotlinx.android.synthetic.main.item_game.view.item_game_first_team_country
+import kotlinx.android.synthetic.main.item_game.view.item_game_first_team_logo
+import kotlinx.android.synthetic.main.item_game.view.item_game_score
+import kotlinx.android.synthetic.main.item_game.view.item_game_second_team_country
+import kotlinx.android.synthetic.main.item_game.view.item_game_second_team_logo
+import kotlinx.android.synthetic.main.item_game.view.item_game_start_time
+import kotlinx.android.synthetic.main.item_game.view.item_game_view_switcher
 import kotlinx.android.synthetic.main.item_news_preview.view.item_news_preview_reactions_count
 import kotlinx.android.synthetic.main.item_news_preview.view.item_news_preview_time
 import kotlinx.android.synthetic.main.item_news_preview.view.item_news_preview_title
 import org.sportsstories.R
+import org.sportsstories.domain.model.Game
+import org.sportsstories.domain.model.GameStatus
 import org.sportsstories.domain.model.NewsPreview
+import org.sportsstories.extensions.toDateWithMonthAndTimeString
 import org.sportsstories.extensions.toTimeString
 import org.sportsstories.internal.di.app.viewmodel.LifecycleViewModelProviders
 import org.sportsstories.lifecycle.event.ContentEvent
@@ -48,7 +61,7 @@ import ru.touchin.roboswag.components.utils.UiUtils
 import java.io.File
 
 @RuntimePermissions
-class ShootStoriesFragment : BaseFragment(), NewsBottomSheet.NewsChooseListener {
+class ShootStoriesFragment : BaseFragment(), NewsBottomSheet.NewsChooseListener, GamesBottomSheet.GameChooseListener {
 
     companion object {
 
@@ -108,6 +121,26 @@ class ShootStoriesFragment : BaseFragment(), NewsBottomSheet.NewsChooseListener 
             item_news_preview_time.text = news.date.toTimeString(context)
             item_news_preview_title.text = news.title
             item_news_preview_reactions_count.text = news.reactionsCount.toString()
+        }
+    }
+
+    override fun onGameChoosed(game: Game) {
+        with(fragment_shoot_stories_game_info) {
+            isVisible = true
+            Glide.with(this)
+                    .load(game.firstTeam.logoUrl)
+                    .centerCrop()
+                    .placeholder(R.drawable.bg_action_button)
+                    .into(item_game_first_team_logo)
+            Glide.with(this)
+                    .load(game.secondTeam.logoUrl)
+                    .centerCrop()
+                    .placeholder(R.drawable.bg_action_button)
+                    .into(item_game_second_team_logo)
+
+            item_game_first_team_country.text = game.firstTeam.country
+            item_game_second_team_country.text = game.secondTeam.country
+            initScoreOrStartTime(game, this)
         }
     }
 
@@ -176,10 +209,36 @@ class ShootStoriesFragment : BaseFragment(), NewsBottomSheet.NewsChooseListener 
         fragment_shoot_stories_button_papper.setOnRippleClickListener {
             NewsBottomSheet.show(this)
         }
+        fragment_shoot_stories_button_ball.setOnRippleClickListener {
+            GamesBottomSheet.show(this)
+        }
+
+    }
+
+    private fun initScoreOrStartTime(item: Game, view: View) = with(view) {
+        when (item.status) {
+            GameStatus.LIVE,
+            GameStatus.ENDED -> {
+                item_game_view_switcher.showChild(R.id.item_game_score)
+                item_game_score.text = getString(
+                        R.string.game_scores,
+                        item.firstTeamScore ?: 0,
+                        item.secondTeamScore ?: 0
+                )
+                item_game_score.setTextColor(getColor(requireContext(), if (item.status == GameStatus.LIVE) {
+                    R.color.C6
+                } else {
+                    R.color.C5
+                }))
+            }
+            GameStatus.NOT_STARTED -> {
+                item_game_view_switcher.showChild(R.id.item_game_start_time)
+                item_game_start_time.text = item.startTime.toDateWithMonthAndTimeString(context)
+            }
+        }
     }
 
     private fun onShootSuccess(file: File) {
-
         setState(State.PICTURE)
         Glide.with(this)
                 .load(file)
@@ -203,6 +262,7 @@ class ShootStoriesFragment : BaseFragment(), NewsBottomSheet.NewsChooseListener 
         if (state == State.CAMERA) {
             setBottomNavigationVisibility(true)
             fragment_shoot_stories_news.isGone = true
+            fragment_shoot_stories_game_info.isGone = true
         } else if (state == State.PICTURE) {
             setBottomNavigationVisibility(false)
         }
