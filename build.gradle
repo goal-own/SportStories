@@ -50,7 +50,8 @@ ext {
             vkSDK                       : '2.1.1',
             glide                       : '4.9.0',
             joda                        : '2.10.3',
-            permissionsDispatcherVersion: '3.1.0'
+            permissionsDispatcherVersion: '3.1.0',
+            camerax_version             : "1.0.0-alpha05"
     ]
 
 }
