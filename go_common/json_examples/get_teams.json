@@ -1,7 +1,0 @@
-{
-  "teams" : Array<Team>,
-  "statusMessage": String,
-  "errorCode": Int,
-  "errorMessage": String
-
-}

@@ -1,7 +1,3 @@
 [submodule "RoboSwag"]
 	path = RoboSwag
 	url = git@github.com:TouchInstinct/RoboSwag.git
-
-[submodule "go_common"]
-    path = go_common
-    url = git@github.com:goal-own/go_common.git

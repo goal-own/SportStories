@@ -1,7 +1,0 @@
-{
-  "games" : Array<Game>,
-  "statusMessage": String,
-  "errorCode": Int,
-  "errorMessage": String
-
-}
