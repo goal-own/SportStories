@@ -12,9 +12,8 @@ class UserRepository @Inject constructor(
         private val storage: DataStorage
 ) {
 
-    // TODO replace with normal userId
     suspend fun getSessionIdAsync(userId: Int, accessToken: String): UUID =
-            baseApi.login("some access token", 123123).data.sessionId
+            baseApi.login(accessToken, userId).data.sessionId
 
     suspend fun checkSessionIdAsync(sessionId: UUID): Boolean =
             baseApi.checkSessionId(sessionId.toString()).data

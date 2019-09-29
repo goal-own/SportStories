@@ -17,6 +17,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toTopOf="@id/fragment_shoot_stories_bottom_container">
 
+        <include
+            android:id="@+id/fragment_shoot_stories_game_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|center"
+            android:layout_marginStart="95dp"
+            android:layout_marginTop="26dp"
+            android:layout_marginEnd="95dp"
+            android:visibility="visible"
+            layout="@layout/item_game" />
+
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fragment_shoot_stories_close"
             android:layout_width="wrap_content"
