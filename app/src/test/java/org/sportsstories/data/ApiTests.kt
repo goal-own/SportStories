@@ -22,7 +22,8 @@ class ApiTests {
     @Test
     fun testQuotes() {
         runBlocking {
-            api.login("qweqwewqe", 12)
+            val sessionId = api.login("qweqwewqe", 12).data.sessionId
+            println(sessionId)
         }
     }
 

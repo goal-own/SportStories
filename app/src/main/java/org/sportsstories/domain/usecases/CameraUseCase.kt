@@ -2,12 +2,14 @@ package org.sportsstories.domain.usecases
 
 import android.graphics.Bitmap
 import android.net.Uri
+import androidx.core.net.toUri
 import kotlinx.coroutines.Deferred
 import org.sportsstories.domain.data_provider.UriBitmapProcessor
 import org.sportsstories.domain.model.camera.LocalAttachment
 import org.sportsstories.domain.repository.StoriesRepository
 import org.sportsstories.domain.repository.UserRepository
 import org.sportsstories.utils.async
+import java.io.File
 import java.io.FileOutputStream
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -22,15 +24,16 @@ class CameraUseCase @Inject constructor(
 
     companion object {
 
-        internal const val PHOTO_QUALITY = 1
+        internal const val PHOTO_QUALITY = 70
 
         private const val META_DATE_DIR_NAME = "stories_meta"
 
     }
 
-    fun uploadPhotoAsync(byteArray: ByteArray): Deferred<Unit> =
+    fun uploadPhotoAsync(file: File): Deferred<Unit> =
             userRepository.withSession { sessionId ->
-                storiesRepository.uploadStories(sessionId.toString(), byteArray)
+                val localAttachment = saveImageFromGalleryAsync(file.toUri()).await()
+                storiesRepository.uploadStories(sessionId.toString(), localAttachment)
             }
 
     fun saveImageFromGalleryAsync(uri: Uri): Deferred<LocalAttachment> = async {
