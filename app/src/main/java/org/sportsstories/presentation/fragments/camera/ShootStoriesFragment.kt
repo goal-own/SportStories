@@ -153,7 +153,7 @@ class ShootStoriesFragment : BaseFragment(), NewsBottomSheet.NewsChooseListener,
         val imageCaptureConfig = ImageCaptureConfig.Builder()
                 .apply {
                     setTargetAspectRatio(rational)
-                    setCaptureMode(ImageCapture.CaptureMode.MIN_LATENCY)
+                    setCaptureMode(ImageCapture.CaptureMode.MAX_QUALITY)
                 }.build()
         val imageCapture = ImageCapture(imageCaptureConfig)
         val previewConfig = PreviewConfig.Builder().apply {

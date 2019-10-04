@@ -15,7 +15,7 @@ android {
         versionCode 2
         versionName "1.0.1"
         // TODO change it
-        buildConfigField "String", "MIDDLE_URL", '"http://95.213.39.140:8080"'
+        buildConfigField "String", "MIDDLE_URL", '"http://deremenko.simsim.ftp.sh:4044"'
 
     }
 
@@ -32,7 +32,10 @@ android {
             storePassword 'androiddebug'
         }
         release {
-            //TODO set release keystore
+            storeFile file('keystore/debug.jks')
+            keyAlias 'debug'
+            keyPassword 'androiddebug'
+            storePassword 'androiddebug'
         }
     }
 

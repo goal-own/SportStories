@@ -27,7 +27,6 @@ class ShootStoriesViewModel @Inject constructor(
     val uploadEvent = MutableLiveData<ContentEvent<Unit>>()
 
     fun savePhoto(imageCapture: ImageCapture, onSuccess: (File) -> Unit, onError: () -> Unit) {
-        photoMetaDataUseCase.getAndPrepareFilePathData(STORIES_DIR)
         val file = photoMetaDataUseCase.getAndPrepareFilePathData(STORIES_DIR).file
         imageCapture.takePicture(file, OnImageSavedListener(onSuccess, onError))
     }
@@ -35,7 +34,7 @@ class ShootStoriesViewModel @Inject constructor(
     fun sendPhoto() {
         savedFile?.let { file ->
             cameraUseCase
-                    .uploadPhotoAsync(file.readBytes())
+                    .uploadPhotoAsync(file)
                     .dispatchTo(uploadEvent)
         }
     }
