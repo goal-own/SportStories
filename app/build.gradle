@@ -16,7 +16,7 @@ android {
         versionName "1.0.1"
         // TODO change it
         buildConfigField "String", "MIDDLE_URL", '"http://deremenko.simsim.ftp.sh:4044"'
-
+        multiDexEnabled = true
     }
 
     compileOptions {

@@ -2,15 +2,20 @@ package org.sportsstories.presentation.fragments
 
 import android.os.Bundle
 import android.os.Parcelable
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.TextView
 import androidx.annotation.ColorRes
+import androidx.annotation.LayoutRes
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
 import org.sportsstories.R
 
-open class BaseFragment : Fragment() {
+abstract class BaseFragment(
+        @LayoutRes private val layoutRes: Int
+) : Fragment() {
 
     companion object {
         private const val STATE_KEY = "STATE_KEY"
@@ -18,9 +23,19 @@ open class BaseFragment : Fragment() {
 
     private var state: Parcelable? = null
 
+    open fun alsoOnCreateView(view: View) = Unit
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         state = savedInstanceState?.getParcelable(STATE_KEY)
+    }
+
+    override fun onCreateView(
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
+    ): View? = inflater.inflate(layoutRes, container, false).also {
+        alsoOnCreateView(it)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
