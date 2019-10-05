@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.view.View
 import androidx.core.content.ContextCompat.getColor
-import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
@@ -23,7 +22,22 @@ import kotlinx.android.synthetic.main.fragment_shoot_strories.fragment_shoot_sto
 import kotlinx.android.synthetic.main.fragment_shoot_strories.fragment_shoot_stories_news
 import kotlinx.android.synthetic.main.fragment_shoot_strories.fragment_shoot_stories_picture
 import kotlinx.android.synthetic.main.fragment_shoot_strories.fragment_shoot_stories_view_finder
+import kotlinx.android.synthetic.main.item_game.view.item_game_first_team_country
+import kotlinx.android.synthetic.main.item_game.view.item_game_first_team_logo
+import kotlinx.android.synthetic.main.item_game.view.item_game_score
+import kotlinx.android.synthetic.main.item_game.view.item_game_second_team_country
+import kotlinx.android.synthetic.main.item_game.view.item_game_second_team_logo
+import kotlinx.android.synthetic.main.item_game.view.item_game_start_time
+import kotlinx.android.synthetic.main.item_game.view.item_game_view_switcher
+import kotlinx.android.synthetic.main.item_news_preview.view.item_news_preview_reactions_count
+import kotlinx.android.synthetic.main.item_news_preview.view.item_news_preview_time
+import kotlinx.android.synthetic.main.item_news_preview.view.item_news_preview_title
 import org.sportsstories.R
+import org.sportsstories.domain.model.Game
+import org.sportsstories.domain.model.GameStatus
+import org.sportsstories.domain.model.NewsPreview
+import org.sportsstories.extensions.toDateWithMonthAndTimeString
+import org.sportsstories.extensions.toTimeString
 import org.sportsstories.internal.di.app.viewmodel.LifecycleViewModelProviders
 import org.sportsstories.lifecycle.event.ContentEvent
 import org.sportsstories.presentation.controllers.CameraXController
@@ -128,7 +142,9 @@ class ShootStoriesFragment : BaseFragment(
 
     private fun initControllers(view: View) {
         newsBottomSheetController = NewsBottomSheetController(this, view)
+        newsBottomSheetController.onNewsChose = ::onNewsChose
         gamesBottomSheetController = GamesBottomSheetController(this, view)
+        gamesBottomSheetController.onGameChose = ::onGameChose
         cameraXController = CameraXController(this, fragment_shoot_stories_view_finder)
     }
 
@@ -198,6 +214,55 @@ class ShootStoriesFragment : BaseFragment(
                 .animate()
                 .translationY(desiredTranslation2)
                 .start()
+    }
+
+    private fun onNewsChose(news: NewsPreview) {
+        with(fragment_shoot_stories_news) {
+            isVisible = true
+            item_news_preview_time.text = news.date.toTimeString(context)
+            item_news_preview_title.text = news.title
+            item_news_preview_reactions_count.text = news.reactionsCount.toString()
+        }
+    }
+
+    private fun onGameChose(game: Game) {
+        with(fragment_shoot_stories_game_info) {
+            isVisible = true
+            Glide.with(this)
+                    .load(game.firstTeam.logoUrl)
+                    .centerCrop()
+                    .placeholder(R.drawable.bg_action_button)
+                    .into(item_game_first_team_logo)
+            Glide.with(this)
+                    .load(game.secondTeam.logoUrl)
+                    .centerCrop()
+                    .placeholder(R.drawable.bg_action_button)
+                    .into(item_game_second_team_logo)
+            item_game_first_team_country.text = game.firstTeam.country
+            item_game_second_team_country.text = game.secondTeam.country
+            initScoreOrStartTime(game, this)
+        }
+    }
+
+    private fun initScoreOrStartTime(item: Game, view: View) = with(view) {
+        when (item.status) {
+            GameStatus.LIVE,
+            GameStatus.ENDED -> {
+                item_game_view_switcher.showChild(R.id.item_game_score)
+                item_game_score.text = view.context.getString(
+                        R.string.game_scores,
+                        item.firstTeamScore ?: 0,
+                        item.secondTeamScore ?: 0
+                )
+                item_game_score.setTextColor(
+                        getColor(view.context, if (item.status == GameStatus.LIVE) R.color.C6 else R.color.C5)
+                )
+            }
+            GameStatus.NOT_STARTED -> {
+                item_game_view_switcher.showChild(R.id.item_game_start_time)
+                item_game_start_time.text = item.startTime.toDateWithMonthAndTimeString(context)
+            }
+        }
     }
 
     @Parcelize

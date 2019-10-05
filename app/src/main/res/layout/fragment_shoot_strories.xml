@@ -74,7 +74,7 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
                 android:layout_marginBottom="30dp"
-                android:visibility="gone"
+                android:visibility="invisible"
                 layout="@layout/item_news_preview" />
 
         </androidx.cardview.widget.CardView>

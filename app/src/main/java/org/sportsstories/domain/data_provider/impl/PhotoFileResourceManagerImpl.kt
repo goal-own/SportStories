@@ -20,7 +20,7 @@ class PhotoFileResourceManagerImpl @Inject constructor(
     }
 
     override fun cleanDir(path: String) {
-        File(path).deleteRecursively()
+        File(filesDir, path).deleteRecursively()
     }
 
     private val filesDir: File
