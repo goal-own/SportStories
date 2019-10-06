@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.annotation.CallSuper
 import androidx.annotation.ColorRes
 import androidx.annotation.LayoutRes
 import androidx.core.content.ContextCompat
@@ -23,20 +24,17 @@ abstract class BaseFragment(
 
     private var state: Parcelable? = null
 
-    open fun alsoOnCreateView(view: View) = Unit
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         state = savedInstanceState?.getParcelable(STATE_KEY)
     }
 
+    @CallSuper
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
-    ): View? = inflater.inflate(layoutRes, container, false).also {
-        alsoOnCreateView(it)
-    }
+    ): View? = inflater.inflate(layoutRes, container, false)
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)

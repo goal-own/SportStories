@@ -5,12 +5,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="56dp"
-    app:cardElevation="4dp"
+    android:foreground="?selectableItemBackground"
+    app:cardElevation="0dp"
     app:cardCornerRadius="6dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="56dp">
+        android:layout_height="56dp"
+        android:background="@drawable/bg_border">
 
         <ImageView
             android:id="@+id/item_game_first_team_logo"

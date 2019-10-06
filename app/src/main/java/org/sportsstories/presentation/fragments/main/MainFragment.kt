@@ -2,7 +2,6 @@ package org.sportsstories.presentation.fragments.main
 
 import android.os.Bundle
 import android.view.View
-import androidx.core.content.ContextCompat
 import kotlinx.android.synthetic.main.main_fragment.main_fragment_games
 import kotlinx.android.synthetic.main.main_fragment.main_fragment_news
 import kotlinx.android.synthetic.main.main_fragment.main_fragment_stories
@@ -31,10 +30,6 @@ class MainFragment : BaseFragment(
     private val newsAdapter = NewsAdapter()
     private val viewModel by lazy {
         LifecycleViewModelProviders.of(this).get(MainScreenViewModel::class.java)
-    }
-
-    override fun alsoOnCreateView(view: View) {
-        activity?.window?.statusBarColor = ContextCompat.getColor(view.context, R.color.C5)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
