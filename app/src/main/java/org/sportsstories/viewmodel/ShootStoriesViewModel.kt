@@ -1,6 +1,5 @@
 package org.sportsstories.viewmodel
 
-import androidx.camera.core.ImageCapture
 import androidx.lifecycle.MutableLiveData
 import org.sportsstories.domain.usecases.CameraUseCase
 import org.sportsstories.domain.usecases.PhotoMetaDataUseCase
@@ -26,9 +25,8 @@ class ShootStoriesViewModel @Inject constructor(
 
     val uploadEvent = MutableLiveData<ContentEvent<Unit>>()
 
-    fun savePhoto(imageCapture: ImageCapture, onSuccess: (File) -> Unit, onError: () -> Unit) {
-        val file = photoMetaDataUseCase.getAndPrepareFilePathData(STORIES_DIR).file
-        imageCapture.takePicture(file, OnImageSavedListener(onSuccess, onError))
+    fun getFileToSaveImage() = photoMetaDataUseCase.getAndPrepareFilePathData(STORIES_DIR).file.also {
+        savedFile = it
     }
 
     fun sendPhoto() {
@@ -41,24 +39,6 @@ class ShootStoriesViewModel @Inject constructor(
 
     fun back() {
         rootScreenNavigation.back()
-    }
-
-    private inner class OnImageSavedListener(
-            private val onSuccess: (File) -> Unit,
-            private val onError: () -> Unit
-    ) : ImageCapture.OnImageSavedListener {
-        override fun onImageSaved(file: File) {
-            savedFile = file
-            onSuccess.invoke(file)
-        }
-
-        override fun onError(
-                imageCaptureError: ImageCapture.ImageCaptureError,
-                message: String,
-                cause: Throwable?
-        ) {
-            onError.invoke()
-        }
     }
 
 }
