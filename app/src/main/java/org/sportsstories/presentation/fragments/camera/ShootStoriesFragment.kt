@@ -36,6 +36,7 @@ import org.sportsstories.R
 import org.sportsstories.domain.model.Game
 import org.sportsstories.domain.model.GameStatus
 import org.sportsstories.domain.model.NewsPreview
+import org.sportsstories.extensions.args
 import org.sportsstories.extensions.toDateWithMonthAndTimeString
 import org.sportsstories.extensions.toTimeString
 import org.sportsstories.internal.di.app.viewmodel.LifecycleViewModelProviders
@@ -59,11 +60,12 @@ class ShootStoriesFragment : BaseFragment(
 
     companion object {
 
+        private const val STATE_ARG = "STATE_ARG"
         fun newInstance() = ShootStoriesFragment()
 
     }
 
-    private var currentState = State.LOADING
+    private var currentState: State by args(STATE_ARG, State.LOADING)
 
     private val viewModel by lazy {
         LifecycleViewModelProviders.of(this).get(ShootStoriesViewModel::class.java)
@@ -94,16 +96,6 @@ class ShootStoriesFragment : BaseFragment(
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         onRequestPermissionsResult(requestCode, grantResults)
-    }
-
-    override fun onPause() {
-        super.onPause()
-        saveState(currentState)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        restoreState(::currentState::set)
     }
 
     @NeedsPermission(Manifest.permission.CAMERA)
