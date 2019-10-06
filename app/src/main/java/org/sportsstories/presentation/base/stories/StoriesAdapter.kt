@@ -28,11 +28,15 @@ class StoriesAdapter : DelegationListAdapter<StoriesItem>(CALLBACK) {
                     item is StoriesItem.AddStories
 
             override fun onCreateViewHolder(parent: ViewGroup) =
-                    AddStoriesViewHolder(UiUtils.inflate(R.layout.item_stories_add, parent))
+                    AddStoriesViewHolder(UiUtils.inflate(R.layout.item_stories, parent))
 
-            override fun onBindViewHolder(holder: AddStoriesViewHolder, item: StoriesItem.AddStories, adapterPosition: Int, collectionPosition: Int, payloads: MutableList<Any>) {
-
-            }
+            override fun onBindViewHolder(
+                    holder: AddStoriesViewHolder,
+                    item: StoriesItem.AddStories,
+                    adapterPosition: Int,
+                    collectionPosition: Int,
+                    payloads: MutableList<Any>
+            ) = Unit
         })
     }
 
