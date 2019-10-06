@@ -17,7 +17,6 @@ import kotlinx.android.synthetic.main.view_stories.view.item_stories_blur
 import kotlinx.android.synthetic.main.view_stories.view.item_stories_text
 import org.sportsstories.R
 import org.sportsstories.utils.ui.BlurBuilder
-import ru.touchin.roboswag.components.utils.UiUtils
 
 class StoriesView @JvmOverloads constructor(
         context: Context,
@@ -27,8 +26,6 @@ class StoriesView @JvmOverloads constructor(
 
     init {
         LayoutInflater.from(context).inflate(R.layout.view_stories, this, true)
-        elevation = UiUtils.OfMetrics.dpToPixels(context, 4f)
-        radius = UiUtils.OfMetrics.dpToPixels(context, 6f)
     }
 
     private val blurPreDrawListener = object : ViewTreeObserver.OnPreDrawListener {

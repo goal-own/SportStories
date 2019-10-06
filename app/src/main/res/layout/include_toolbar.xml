@@ -4,8 +4,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="56dp"
+    android:layout_height="80dp"
     android:background="@color/C5"
+    android:fitsSystemWindows="true"
+    android:paddingTop="24dp"
     app:layout_collapseMode="pin"
     app:contentInsetStart="0dp">
 

@@ -78,16 +78,12 @@ class ShootStoriesFragment : BaseFragment(
     private lateinit var gamesBottomSheetController: GamesBottomSheetController
     private lateinit var cameraXController: CameraXController
 
-    override fun alsoOnCreateView(view: View) {
-        activity?.window?.statusBarColor = getColor(view.context, R.color.C8)
-        view.post(::initCamera)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initObservers()
         initControllers(view)
         initViews()
+        initCamera()
     }
 
     @SuppressLint("NeedOnRequestPermissionsResult")

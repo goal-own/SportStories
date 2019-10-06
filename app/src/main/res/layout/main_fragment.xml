@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/C0"
     android:orientation="vertical">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -16,12 +17,13 @@
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fitsSystemWindows="true"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="56dp"
+                android:layout_marginTop="80dp"
                 android:orientation="vertical">
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -43,8 +45,8 @@
                     android:clipToPadding="false"
                     android:orientation="horizontal"
                     android:overScrollMode="never"
-                    app:spanCount="2"
                     app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                    app:spanCount="2"
                     tools:itemCount="4"
                     tools:listitem="@layout/item_game" />
 
@@ -66,9 +68,9 @@
         android:clipToPadding="false"
         android:paddingTop="8dp"
         android:paddingBottom="0dp"
-        tools:itemCount="4"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:itemCount="4"
         tools:listitem="@layout/item_news_preview" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

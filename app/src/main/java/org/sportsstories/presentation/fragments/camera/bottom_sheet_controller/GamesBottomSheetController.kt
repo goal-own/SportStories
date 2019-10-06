@@ -39,7 +39,7 @@ class GamesBottomSheetController(
                 GridMarginDecorations(UiUtils.OfMetrics.dpToPixels(parentContainer.context, 8f).toInt())
         )
         gamesAdapter.itemClickListener = { item, _ ->
-            onGameChose(item)
+            onGameChose.invoke(item)
             dismiss()
         }
         viewModel.games.observe(lifecycleOwner, Observer { event ->
