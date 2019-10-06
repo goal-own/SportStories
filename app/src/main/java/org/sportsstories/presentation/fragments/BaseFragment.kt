@@ -18,36 +18,12 @@ abstract class BaseFragment(
         @LayoutRes private val layoutRes: Int
 ) : Fragment() {
 
-    companion object {
-        private const val STATE_KEY = "STATE_KEY"
-    }
-
-    private var state: Parcelable? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        state = savedInstanceState?.getParcelable(STATE_KEY)
-    }
-
     @CallSuper
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? = inflater.inflate(layoutRes, container, false)
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putParcelable(STATE_KEY, state)
-    }
-
-    protected fun saveState(state: Parcelable) {
-        this.state = state
-    }
-
-    protected fun <T : Parcelable> restoreState(restorer: (T) -> Unit) {
-        getState<T>()?.let(restorer)
-    }
 
     protected fun showErrorSnackbar(
             message: String,
@@ -64,9 +40,6 @@ abstract class BaseFragment(
             action: (() -> Unit)? = null,
             actionText: String? = null
     ) = snackbar(view, message, R.color.C4, R.color.C0, length, action, actionText)?.show()
-
-    @Suppress("UNCHECKED_CAST")
-    private fun <T : Parcelable> getState(): T? = state as T?
 
     private fun snackbar(
             view: View? = activity?.findViewById(android.R.id.content),
